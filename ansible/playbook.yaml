@@ -41,6 +41,7 @@
     #     - zoom
     #     - nerd-fonts-complete
     #     - mbpfan-git
+    #     - xf86-input-mtrack-git
 
     - name: copy gpe06 service
       copy:
@@ -126,3 +127,8 @@
       copy:
         src: configs/acpid_lid
         dest: /etc/acpi/events/lid
+
+    - name: copy mtrack config to xorg dir
+      copy:
+        src: configs/00-touchpad.conf
+        dest: /etc/X11/xorg.conf.d/00-touchpad.conf
