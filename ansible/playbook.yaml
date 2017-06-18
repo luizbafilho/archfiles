@@ -1,0 +1,128 @@
+---
+- name: Arch setup
+  hosts: localhost
+  connection: local
+  user: luiz
+  become: true
+  vars:
+    pwd: "{{ ansible_env.PWD }}"
+  tasks:
+
+    # - name: get basic packages
+    #   aur: name={{item}} state=present
+    #   with_items:
+    #     - i3blocks
+    #     - pavucontrol
+    #     - acpid
+    #     - acpi
+    #     - xarchiver
+    #     - playerctl
+    #     - nitrogen
+    #     - libva-intel-driver
+    #     - xsel
+    #     - gnome-terminal
+    #     - arandr
+    #     - thunar
+    #     - lxappearance
+    #     - spotify
+    #     - imagemagick
+    #     - ttf-hack
+    #     - broadcom-wl-dkms
+    #     - networkmanager-vpnc
+    #     - qt4
+    #     - gtk-theme-arc-git
+    #     - moka-icon-theme-git
+    #     - rofi
+    #     - lm_sensors
+    #     - sysstat
+    #     - slack-desktop
+    #     - acpilight
+    #     - xcalib
+    #     - zoom
+    #     - nerd-fonts-complete
+    #     - mbpfan-git
+
+    - name: copy gpe06 service
+      copy:
+        src: services/gpe06.service
+        dest: /etc/systemd/system/gpe06.service
+
+    - name: start gpe6 service
+      service: name=gpe06 state=started enabled=yes
+
+    - name: copy acpid service
+      copy:
+        src: services/acpid.service
+        dest: /etc/systemd/system/acpid.service
+
+    - name: start acpid service
+      service: name=acpid state=started enabled=yes
+
+    - name: copy san francisco font
+      copy:
+        src: "fonts/System San Francisco Display Regular.ttf"
+        dest: "/home/luiz/.fonts/System San Francisco Display Regular.ttf"
+
+    - name: copy mbpfan config
+      copy:
+        src: configs/mbpfan.conf
+        dest: /etc/mbpfan.conf
+
+    - name: link i3 config
+      file:
+        src: "{{pwd}}/files/configs/i3.conf"
+        dest: /home/luiz/.config/i3/config
+        owner: luiz
+        group: users
+        state: link
+
+    - name: link i3blocks config
+      file:
+        src: "{{pwd}}/files/configs/i3blocks.conf"
+        dest: /etc/i3blocks.conf
+        mode: 0755
+        state: link
+
+    - name: copy custom i3blocks bandwidth script
+      copy:
+        src: i3blocks/bandwidth
+        dest: /usr/lib/i3blocks/bandwidth
+
+    - name: link lxappearance config
+      file:
+        src: "{{pwd}}/files/configs/lxappearance.conf"
+        dest: /home/luiz/.gtkrc-2.0
+        owner: luiz
+        group: users
+        state: link
+
+    - name: link Xmodmap config
+      file:
+        src: "{{pwd}}/files/configs/Xmodmap"
+        dest: /home/luiz/.Xmodmap
+        owner: luiz
+        group: users
+        state: link
+
+    - name: copy backlight udev rules
+      copy:
+        src: configs/udev/90-backlight.rules
+        dest: /etc/udev/rules.d/90-backlight.rules
+
+    - name: copy monitors udev rules
+      copy:
+        src: configs/udev/95-monitors.rules
+        dest: /etc/udev/rules.d/95-monitors.rules
+
+    - name: link monitor hot plug
+      file:
+        src: "{{pwd}}/files/scripts/monitor-hot-plug"
+        dest: /home/luiz/.monitor-hot-plug
+        owner: luiz
+        group: users
+        state: link
+
+    - name: copy lid event to acpid dir
+      copy:
+        src: configs/acpid_lid
+        dest: /etc/acpi/events/lid

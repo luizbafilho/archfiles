@@ -1,0 +1,1 @@
+ACTION=="change", RUN+="/home/luiz/.monitor-hot-plug"
