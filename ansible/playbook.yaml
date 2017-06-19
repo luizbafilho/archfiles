@@ -43,6 +43,7 @@
     #     - mbpfan-git
     #     - xf86-input-mtrack-git
     #     - pm-utils
+    #     - rfkill
 
     - name: copy gpe06 service
       copy:
@@ -149,6 +150,12 @@
         dest: /etc/pm/sleep.d/11suspend
         mode: 0755
 
+    - name: copy bluetooth script to pm-utils dir
+      copy:
+        src: scripts/10_bluetooth
+        dest: /etc/pm/sleep.d/10_bluetooth
+        mode: 0755
+
     - name: copy rc-local service
       copy:
         src: services/rc-local.service
@@ -162,3 +169,8 @@
         src: "{{pwd}}/files/scripts/rc.local"
         dest: /etc/rc.local
         state: link
+
+    - name: add autojump to zshrc
+      lineinfile:
+        path: /home/luiz/.zshrc
+        line: '. /usr/share/autojump/autojump.zsh'
