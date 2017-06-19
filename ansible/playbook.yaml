@@ -107,6 +107,14 @@
         group: users
         state: link
 
+    - name: link Xresources config
+      file:
+        src: "{{pwd}}/files/configs/Xresources"
+        dest: /home/luiz/.Xresources
+        owner: luiz
+        group: users
+        state: link
+
     - name: copy backlight udev rules
       copy:
         src: configs/udev/90-backlight.rules
@@ -137,6 +145,6 @@
 
     - name: copy suspend hook to pm-utils dir
       copy:
-        src: configs/11suspend
+        src: scripts/11suspend
         dest: /etc/pm/sleep.d/11suspend
         mode: 0755
