@@ -6,44 +6,47 @@
   become: true
   vars:
     pwd: "{{ ansible_env.PWD }}"
+  handlers:
+    - name: update grub
+      shell: grub-mkconfig -o /boot/grub/grub.cfg
   tasks:
-
-    # - name: get basic packages
-    #   aur: name={{item}} state=present
-    #   with_items:
-    #     - i3blocks
-    #     - pavucontrol
-    #     - acpid
-    #     - acpi
-    #     - xarchiver
-    #     - playerctl
-    #     - nitrogen
-    #     - libva-intel-driver
-    #     - xsel
-    #     - gnome-terminal
-    #     - arandr
-    #     - thunar
-    #     - lxappearance
-    #     - spotify
-    #     - imagemagick
-    #     - ttf-hack
-    #     - broadcom-wl-dkms
-    #     - networkmanager-vpnc
-    #     - qt4
-    #     - gtk-theme-arc-git
-    #     - moka-icon-theme-git
-    #     - rofi
-    #     - lm_sensors
-    #     - sysstat
-    #     - slack-desktop
-    #     - acpilight
-    #     - xcalib
-    #     - zoom
-    #     - nerd-fonts-complete
-    #     - mbpfan-git
-    #     - xf86-input-mtrack-git
-    #     - pm-utils
-    #     - rfkill
+    - name: get basic packages
+      aur: name={{item}} state=present
+      with_items:
+        - i3blocks
+        - pavucontrol
+        - acpid
+        - acpi
+        - xarchiver
+        - playerctl
+        - nitrogen
+        - libva-intel-driver
+        - xsel
+        - gnome-terminal
+        - arandr
+        - thunar
+        - lxappearance
+        - spotify
+        - imagemagick
+        - ttf-hack
+        - broadcom-wl-dkms
+        - networkmanager-vpnc
+        - qt4
+        - gtk-theme-arc-git
+        - moka-icon-theme-git
+        - rofi
+        - lm_sensors
+        - sysstat
+        - slack-desktop
+        - acpilight
+        - xcalib
+        - zoom
+        - nerd-fonts-complete
+        - mbpfan-git
+        - xf86-input-mtrack-git
+        - pm-utils
+        - rfkill
+        - docker
 
     - name: copy gpe06 service
       copy:
@@ -174,3 +177,26 @@
       lineinfile:
         path: /home/luiz/.zshrc
         line: '. /usr/share/autojump/autojump.zsh'
+
+    - name: start docker service
+      service: name=docker state=started enabled=yes
+
+    - name: add luiz to docker group
+      user: name=luiz group=docker append=yes
+
+    - name: copy chromium flags file to config dir
+      copy:
+        src: configs/chromium-flags.conf
+        dest: /home/luiz/.config/chromium-flags.conf
+        owner: luiz
+        group: users
+
+    - name: add mac os x entry to grub
+      blockinfile:
+        path: /etc/grub.d/40_custom
+        block: |
+          menuentry "MacOS X" {
+           exit
+          }
+      notify:
+        - update grub
