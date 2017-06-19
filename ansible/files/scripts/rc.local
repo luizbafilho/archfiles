@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Preventing instant resume after suspend
+echo LID0 > /proc/acpi/wakeup
