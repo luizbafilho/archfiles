@@ -95,10 +95,18 @@
         dest: /usr/lib/i3blocks/bandwidth
         mode: 0755
 
-    - name: link lxappearance config
+    - name: link lxappearance gtk2 config
       file:
-        src: "{{pwd}}/files/configs/lxappearance.conf"
+        src: "{{pwd}}/files/configs/gtkrc-2.0.conf"
         dest: /home/luiz/.gtkrc-2.0
+        owner: luiz
+        group: users
+        state: link
+
+    - name: link lxappearance gtk3 config
+      file:
+        src: "{{pwd}}/files/configs/gtk-3.0.conf"
+        dest: /home/luiz/.config/gtk-3.0/settings.ini
         owner: luiz
         group: users
         state: link

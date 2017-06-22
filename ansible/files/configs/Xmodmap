@@ -2,3 +2,8 @@ clear lock
 clear control
 add control = Caps_Lock Control_L Control_R
 keycode 66 = Control_L Caps_Lock NoSymbol NoSymbol
+
+! clear mod1
+! keycode 0x6c = ISO_Level3_Shift NoSymbol ISO_Level3_Shift NoSymbol
+! add Mod1 = Alt_L
+! add Mod5 = ISO_Level3_Shift Multi_key
